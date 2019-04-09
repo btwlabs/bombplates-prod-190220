@@ -52,7 +52,6 @@ class ImageCachePreset extends DrupalSqlBase {
     $results = $this->select('imagecache_action', 'ica')
       ->fields('ica')
       ->condition('presetid', $row->getSourceProperty('presetid'))
-      ->condition('action', '', '<>')
       ->execute();
 
     foreach ($results as $key => $result) {

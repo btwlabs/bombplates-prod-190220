@@ -26,7 +26,6 @@
         ],
         "merge-plugin": {
             "include": [
-                "vendor/stripe/composer.json",
                 "core/composer.json"
             ],
             "recurse": true,
