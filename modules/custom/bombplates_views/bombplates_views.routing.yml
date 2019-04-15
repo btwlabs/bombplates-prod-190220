@@ -1,0 +1,7 @@
+bombplates_views.preview:
+  path: '/preview/{theme_id}'
+  defaults:
+    _controller: '\Drupal\bombplates_views\Controller\BombplatesViewsController::preview'
+    _title: 'Preview Theme'
+  requirements:
+    _permission: 'access content'

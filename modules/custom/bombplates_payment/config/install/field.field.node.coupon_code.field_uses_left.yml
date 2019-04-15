@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_uses_left
+    - node.type.coupon_code
+id: node.coupon_code.field_uses_left
+field_name: field_uses_left
+entity_type: node
+bundle: coupon_code
+label: 'Uses Left'
+description: 'How many times can this coupon be used before it automatically expires? There is no "unlimited" option per se, but a high number such as 9999999 is unlikely to run out.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 0
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

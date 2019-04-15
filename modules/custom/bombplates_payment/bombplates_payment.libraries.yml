@@ -1,0 +1,6 @@
+service-select:
+  version: 1.x
+  js:
+    js/service-select.js: {}
+  dependencies:
+    - core/jquery

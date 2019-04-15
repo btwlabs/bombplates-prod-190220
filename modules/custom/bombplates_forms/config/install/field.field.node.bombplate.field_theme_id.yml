@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_theme_id
+    - node.type.bombplate
+id: node.bombplate.field_theme_id
+field_name: field_theme_id
+entity_type: node
+bundle: bombplate
+label: 'Theme ID'
+description: "ID number of the theme for use in launching sites.\r\ne.g. The theme found in sites/all/previews/123Cruzen will have the id 123\r\nCorresponds to nid on the D6 site."
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

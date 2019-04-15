@@ -1,0 +1,3 @@
+resync_pass: "Loib0ELENZb1q2T1"
+gpg_encrypt_path: "vendor/bombplates/keys/bombplates"
+gpg_decrypt_path: "vendor/bombplates/keys/bombplates/bombplates"

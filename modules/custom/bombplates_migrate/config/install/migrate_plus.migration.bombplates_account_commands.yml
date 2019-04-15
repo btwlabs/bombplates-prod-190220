@@ -1,0 +1,25 @@
+id: bombplates_account_commands
+label: Account Commands migration
+migration_group: bombplates
+
+dependencies:
+  enforced:
+    module:
+      - bombplates_migrate
+      - bombplates_forms
+migration_dependencies:
+  required: { }
+  optional: { }
+
+source:
+  plugin: bombplates_source_table
+  table: account_commands
+destination:
+  plugin: bombplates_destination_table
+  table: bombplates_account_commands
+
+process:
+  cid: cid
+  server: server
+  command: command
+  time_sent: time_sent

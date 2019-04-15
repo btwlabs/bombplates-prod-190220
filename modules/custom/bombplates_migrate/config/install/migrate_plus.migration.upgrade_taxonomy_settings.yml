@@ -1,0 +1,29 @@
+id: upgrade_taxonomy_settings
+migration_group: bombplates
+label: 'Taxonomy configuration'
+
+class: null
+field_plugin_method: null
+cck_plugin_method: null
+langcode: en
+status: true
+
+dependencies:
+  enforced:
+    module:
+      - bombplates_migrate
+migration_dependencies:
+  required: { }
+  optional: { }
+
+source:
+  plugin: variable
+  variables:
+    - taxonomy_override_selector
+    - taxonomy_terms_per_page_admin
+process:
+  override_selector: taxonomy_override_selector
+  terms_per_page_admin: taxonomy_terms_per_page_admin
+destination:
+  plugin: config
+  config_name: taxonomy.settings

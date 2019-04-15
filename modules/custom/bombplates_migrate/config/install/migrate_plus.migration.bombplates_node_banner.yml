@@ -1,0 +1,51 @@
+id: bombplates_banner
+label: Bombplates Banner node migration
+migration_group: bombplates
+deriver: Drupal\node\Plugin\migrate\D6NodeDeriver
+
+dependencies:
+  enforced:
+    module:
+      - bombplates_migrate
+migration_dependencies:
+  required:
+    - bombplates_user
+    - bombplates_file
+
+source:
+  plugin: d6_node
+  node_type: banner
+destination:
+  plugin: entity:node
+
+process:
+  type: type
+  nid: nid
+  vid: vid
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: "und"
+  title: title
+  uid: node_uid
+  status: status
+  created: created
+  changed: changed
+  promote: promote
+  sticky: sticky
+  'body/format':
+    plugin: default_value
+    default_value: plain_text
+  'body/value': body
+  'body/summary': teaser
+  revision_uid: revision_uid
+  revision_log: log
+  revision_timestamp: timestamp
+  field_banner_image:
+    plugin: migration_lookup
+    migration: bombplates_file
+    no_stub: true
+    source: 'field_banner_image/0/fid'
+  'field_banner_link/uri': 'field_link/0/value'
+  'field_banner_link/title': 'field_link_copy/0/value'
+  field_order: field_order

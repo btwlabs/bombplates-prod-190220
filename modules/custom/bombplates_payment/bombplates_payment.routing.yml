@@ -1,0 +1,14 @@
+payment_update:
+  path: '/user/payment'
+  defaults:
+    _form: '\Drupal\bombplates_payment\Form\BombplatesPaymentForm'
+    _title: 'Update Payment Information'
+  requirements:
+    _permission: 'use bombplates_payment'
+payment_admin:
+  path: '/admin/config/payment/settings'
+  defaults:
+    _form: '\Drupal\bombplates_payment\Form\BombplatesPaymentAdmin'
+    _title: 'Update Bombplates Payment Settings'
+  requirements:
+    _permission: 'admin bombplates_payment'

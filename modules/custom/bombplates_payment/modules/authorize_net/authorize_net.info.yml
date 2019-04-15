@@ -1,0 +1,10 @@
+name: 'Authorize.net ARB'
+type: 'module'
+description: 'Process existing subscriptions using Authorize.net''s ARB API. For/by Bombplates/MCN'
+package: 'Bombplates'
+core: '8.x'
+version: '8.x-2.1'
+dependencies:
+ - bombplates
+ - bombplates_payment
+ - field

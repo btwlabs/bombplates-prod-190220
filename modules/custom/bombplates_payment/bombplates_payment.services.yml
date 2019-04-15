@@ -1,0 +1,5 @@
+services:
+  bombplates_payment_event_subscriber:
+    class: Drupal\bombplates_payment\EventSubscriber\BombplatesPaymentCouponSubscriber
+    tags:
+      - {name: event_subscriber}

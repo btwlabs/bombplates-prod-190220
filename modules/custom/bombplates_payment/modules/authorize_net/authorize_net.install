@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * @file
+ *  contains [un]installation hooks for authorize_net module
+ */
+
+/**
+ * Implements hook_uninstall
+ */
+function authorize_net_uninstall() {
+  $entity_fields = [
+    'user' => [
+      'arb_subscription_id',
+    ],
+    'node' => [
+      'arb_subscription_id',
+    ],
+  ];
+  foreach ($entity_fields AS $entity => $fields) {
+    foreach ($fields AS $field) {
+      if ($field_storage = \Drupal\field\Entity\FieldStorageConfig::loadByName($entity, "field_$field")) {
+        $field_storage->delete();
+      }
+    } // foreach field in fields
+  } // foreach entity=>fields in entity_fields
+  field_purge_batch(10);
+} // hook_uninstall

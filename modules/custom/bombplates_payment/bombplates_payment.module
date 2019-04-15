@@ -1,0 +1,78 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for Bombplates Payment module
+ */
+
+use Drupal\bombplates_payment\Inc as BombplatesPayment;
+
+/**
+ * Implements hook_cron
+ */
+function bombplates_payment_cron() {
+  // process missed payments
+  BombplatesPayment\CronFunc::outOfBandPayments();
+  BombplatesPayment\CronFunc::warnDelinquents();
+  BombplatesPayment\CronFunc::flagDelinquents();
+  BombplatesPayment\CronFunc::suspendDelinquents();
+} // hook_cron
+
+/**
+ * Implements hook_bombplates_protected_fields
+ */
+function bombplates_payment_bombplates_protected_fields() {
+  return ['field_artists_referred', 'field_billing_status', 'field_last_payment', 'field_missed_payments', 'field_next_payment', 'field_referral_entered', 'field_suspended'];
+} // hook_entity_field_access
+
+/**
+ * Implements hook_bombplates_process_account
+ */
+function bombplates_payment_bombplates_process_account($action, $account, $options = []) {
+  switch ($action) {
+    case 'suspend' :
+      $missed_payments = (int)$options['missed_payments'];
+      $increment_pay_date = (bool)$options['increment_pay_date'];
+      BombplatesPayment\AccountFunc::suspendAccount($account, $missed_payments, $increment_pay_date);
+      break;
+
+    case 'unsuspend' :
+      $log_payments = (bool)$options['log_payments'];
+      $forgive_payments = (bool)$options['forgive_payments']; // mutually exclusive with log_payments
+      $values = $options['values'];
+      BombplatesPayment\AccountFunc::unsuspendAccount($account, $log_payments, $forgive_payments, $values);
+      break;
+
+    case 'paid' :
+      BombplatesPayment\AccountFunc::paidAccount($account, $options);
+  } // switch action
+} // hook_bombplates_process_account
+
+/**
+ * Implements bombplates_payment_admin_form
+ */
+function bombplates_payment_bombplates_payment_admin_form() {
+  $fields = [];
+  $services = \Drupal::moduleHandler()->invokeAll('bombplates_payment_list');
+  $current_service = \Drupal::config('bombplates_payment.settings')->get('bombplates_payment_service');
+  $fields['bombplates_payment_service'] = [
+    '#title' => t('Default Payment Service'),
+    '#type' => 'select',
+    '#options' => ['-Select Service-'] + $services,
+    '#default_value' => $current_service,
+    '#attributes' => [
+      'id' => 'bombplates_payment_service_select',
+    ],
+    '#attached' => [
+      'library' => ['bombplates_payment/service-select'],
+    ]
+  ];
+  return [
+    'bombplates_payment' => [
+      '#type' => 'details',
+      '#title' => t('Global Payment Settings'),
+      '#open' => !$current_service,
+      $fields,
+    ],
+  ];
+} // bombplates_payment_admin_form

@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_sku
+    - node.type.bombplate
+id: node.bombplate.field_sku
+field_name: field_sku
+entity_type: node
+bundle: bombplate
+label: SKU
+description: 'A unique five digit number that references the Bombplate'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

@@ -1,0 +1,48 @@
+<?php
+
+/**
+ * @file contains installation/update hooks for stripe module
+ */
+
+/**
+ * Implements hook_requirements
+ */
+function stripe_requirements($phase) {
+  $result = [];
+  if ($phase == 'install') {
+    if (!class_exists('\\Stripe\\Stripe')) {
+      $result['stripe'] = [
+        'title' => 'Stripe API is required',
+        'description' => 'The Stripe API must be installed. If you are using composer, add the lines '
+          . '"sites/*/modules/*/modules/*/composer.json" and "sites/*/modules/*/modules/custom/*/composer.json" '
+          . 'to your primary composer.json file and run "composer update"',
+        'severity' => REQUIREMENT_WARNING,
+      ];
+    } // \Stripe\Stripe class is missing
+  } // if phase=install
+  return $result;
+} // hook_requirements
+
+/**
+ * Implements hook_uninstall
+ */
+function stripe_uninstall() {
+  $entity_fields = [
+    'user' => [
+      'stripe_customer',
+      'stripe_subscription',
+    ],
+    'node' => [
+      'stripe_charge',
+      'stripe_customer',
+    ],
+  ];
+  foreach ($entity_fields AS $entity => $fields) {
+    foreach ($fields AS $field) {
+      if ($field_storage = \Drupal\field\Entity\FieldStorageConfig::loadByName($entity, "field_$field")) {
+        $field_storage->delete();
+      }
+    } // foreach field in fields
+  } // foreach entity=>fields in entity_fields
+  field_purge_batch(10);
+} // hook_uninstall

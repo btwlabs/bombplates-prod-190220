@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - bombplates_payment
+id: customer
+label: Customer
+weight: 3
+is_admin: null
+permissions:
+  - 'use bombplates_payment'

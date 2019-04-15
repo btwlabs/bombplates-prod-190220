@@ -1,0 +1,58 @@
+id: bombplates_file
+label: Bombplates Files
+migration_group: bombplates
+
+dependencies:
+  enforced:
+    module:
+      - bombplates_migrate
+migration_dependencies:
+  required:
+    - bombplates_user
+
+source:
+  plugin: d6_file
+  constants:
+    #TODO: Verify live base path before final deployment
+    source_base_path: 'http://www-bombplates-com.mcnutility.com/'
+    #source_base_path: 'http://www-bombplates-com.devmcn.com/'
+process:
+  skip_webform:
+    -
+      plugin: explode
+      source: filepath
+      delimiter: /
+    -
+      plugin: skip_on_value
+      value: 'webform'
+      method: row
+  fid: fid
+  filename: filename
+  source_full_path:
+    -
+      plugin: concat
+      delimiter: /
+      source:
+        - constants/source_base_path
+        - filepath
+    -
+      plugin: urlencode
+  destination_full_path:
+    plugin: file_uri
+    source:
+      - filepath
+      - file_directory_path
+      - temp_directory_path
+      - is_public
+  uri:
+    plugin: file_copy
+    source:
+      - '@source_full_path'
+      - '@destination_full_path'
+  filemime: filemime
+  status: status
+  changed: timestamp
+  uid: uid
+destination:
+  plugin: entity:file
+

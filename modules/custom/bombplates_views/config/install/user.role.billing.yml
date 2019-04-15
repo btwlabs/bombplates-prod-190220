@@ -1,0 +1,9 @@
+langcode: en
+status: true
+dependencies: {  }
+id: billing
+label: Billing
+weight: 7
+is_admin: null
+permissions:
+ - 'admin bombplates_payment'

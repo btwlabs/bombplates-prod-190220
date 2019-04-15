@@ -1,0 +1,47 @@
+<?php
+
+/**
+ * @file
+ * Core hooks and functions for pw_sync module
+ */
+
+use Drupal\pw_sync\Inc as PWSync;
+
+/**
+ * Implements hook_form_FORM_ID_alter (user_form)
+ */
+function pw_sync_form_user_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  $account = $form_state->getFormObject()->getEntity();
+  if ($account->id() && $account->hasPermission('use pw_sync')) {
+    $form_state->loadInclude('pw_sync', 'inc', 'func/forms');
+    $form['#validate'][] = PWSync\FormsFunc::class . '::userFormAlterValidate';
+    // Run our own submit handler before updating the user
+    array_unshift($form['actions']['submit']['#submit'], PWSync\FormsFunc::class . '::userFormAlterSubmitPresave');
+    $form['actions']['submit']['#submit'][] = PWSync\FormsFunc::class . '::userFormAlterSubmitPostsave';
+  }
+} // hook_form_FORM_ID_alter (user_form)
+
+/**
+ * Implements hook_form_FORM_ID_alter (user_pass)
+ */
+function pw_sync_form_user_pass_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  if (PWSync\MiscFunc::isClient()) { //client
+    $callback = PWSync\FormsFunc::class . '::forgotPasswordSubmitClient';
+  }
+  if (PWSync\MiscFunc::isServer()) { // server
+    $callback = PWSync\FormsFunc::class . '::forgotPasswordSubmitServer';
+  }
+  if (isset($form['actions']['submit']['#submit'])) {
+    $form['actions']['submit']['#submit'][] = $callback;
+  }
+  else {
+    $form['#submit'][] = $callback;
+  }
+} // hook_form_FORM_ID_alter (user_pass)
+
+/**
+ * Implements hook_bombplates_protected_fields
+ */
+function pw_sync_bombplates_protected_fields() {
+   return ['field_pw_sync_key'];
+} // hook_bombplates_protected_fields

@@ -1,0 +1,48 @@
+<?php
+
+/**
+ * @file
+ *  Hook functions for bombplates_views module
+ */
+
+/**
+ * Implements hook_theme
+ */
+function bombplates_views_theme() {
+  return [
+    'bombplates_views_preview' => [
+      'variables' => ['template_id' => 1058],
+      'template' => 'bombplates_views_preview',
+    ],
+  ];
+} // bombplates_views_theme
+
+/**
+ * Implements hook_views_pre_render
+ */
+function bombplates_views_views_pre_render(\Drupal\views\ViewExecutable $view) {
+  if ($view->id() == 'bombplates') {
+    $view->element['#attached']['library'][] = 'core/drupal.dialog.ajax';
+    $view->element['#attached']['library'][] = 'core/jquery';
+  }
+} // hook_views_pre_render
+
+/**
+ * Implements hook_bombplates_admin_links
+ */
+function bombplates_views_bombplates_admin_links($account) {
+  if ($account->hasPermission('admin bombplates_payment')) {
+    return [
+      'payment_views' => [
+        '#type' => 'link',
+        '#title' => t('Payments'),
+        '#url' => \Drupal\Core\Url::fromRoute('view.bombplates_payments.payments'),
+      ],
+      'users' => [
+        '#type' => 'link',
+        '#title' => t('Users'),
+        '#url' => \Drupal\Core\Url::fromRoute('view.bombplates_users.bombplates_paying'),
+      ],
+    ];
+  } // if permission
+} // hook_bombplates_admin_links

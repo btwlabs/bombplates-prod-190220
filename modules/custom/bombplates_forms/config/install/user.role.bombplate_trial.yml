@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies: {  }
+id: bombplate_trial
+label: 'Bombplate Trial'
+weight: 7
+is_admin: null
+permissions:
+ - 'cancel bombplates_form'
+ - 'use bombplates_payment'

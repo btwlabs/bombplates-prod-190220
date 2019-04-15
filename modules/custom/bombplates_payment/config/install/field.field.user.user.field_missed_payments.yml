@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_missed_payments
+  module:
+    - user
+  enforced:
+    module:
+      - bombplates_payment
+id: user.user.field_missed_payments
+field_name: field_missed_payments
+entity_type: user
+bundle: user
+label: 'Missed Payments'
+description: 'Number of payments this user has missed. DO NOT EDIT'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

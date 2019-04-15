@@ -1,0 +1,7 @@
+authorize_net_callback:
+  path: '/callback/payment/authorize_net'
+  defaults:
+    _controller: '\Drupal\authorize_net\Controller\AuthorizeNetController::paymentCallback'
+    _title: 'Authorize.net payment callback'
+  requirements:
+    _permission: 'access content'

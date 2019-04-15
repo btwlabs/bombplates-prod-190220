@@ -1,0 +1,13 @@
+name: 'Bombplates Views'
+type: 'module'
+description: 'Create default views showing Bombplates users and payments. For/by Bombplates/MCN'
+package: 'Bombplates'
+core: '8.x'
+version: '8.x-1.0'
+dependencies:
+ - authorize_net
+ - bombplates
+ - bombplates_forms
+ - bombplates_payment
+ - field
+ - stripe

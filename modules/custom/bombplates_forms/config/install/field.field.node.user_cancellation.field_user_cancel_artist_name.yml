@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_user_cancel_artist_name
+    - node.type.user_cancellation
+id: node.user_cancellation.field_user_cancel_artist_name
+field_name: field_user_cancel_artist_name
+entity_type: node
+bundle: user_cancellation
+label: 'Artist Name'
+description: 'Artist/band name'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

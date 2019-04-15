@@ -1,0 +1,19 @@
+stripe-external:
+  remote: https://js.stripe.com
+  version: 3.x
+  license:
+    name: Proprietary
+    url: https://stripe.com/us/legal
+    gpl-compatible: false
+  js:
+    https://js.stripe.com/v3/: { type: external, minified: true }
+  dependencies:
+   - core/drupalSettings
+payment-form:
+  version: "1.0"
+  js:
+    js/payment_form.js: {}
+  dependencies:
+   - core/drupalSettings
+   - core/jquery
+   - stripe/stripe-external

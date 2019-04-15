@@ -1,0 +1,7 @@
+bombplates:
+  path: '/manage'
+  defaults:
+    _controller: '\Drupal\bombplates\Controller\BombplatesController::manage'
+    _title: 'Bombplates Management'
+  requirements:
+    _permission: 'access administration content'

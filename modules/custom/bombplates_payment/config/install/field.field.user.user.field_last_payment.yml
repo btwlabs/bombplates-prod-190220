@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_last_payment
+  module:
+    - user
+    - datetime
+  enforced:
+    module:
+      - bombplates_payment
+id: user.user.field_last_payment
+field_name: field_last_payment
+entity_type: user
+bundle: user
+label: 'Last Payment'
+description: 'When was this user''s last payment? DO NOT EDIT'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

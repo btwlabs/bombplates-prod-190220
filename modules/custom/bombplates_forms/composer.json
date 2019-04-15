@@ -1,0 +1,21 @@
+{
+  "name": "drupal/bombplates_forms",
+  "description": "Sign-up forms for account creation, modification, and deletion. Includes account manager versions.",
+  "type": "drupal-module",
+  "authors": [
+    {
+      "name": "MCN Interactive",
+      "homepage": "https://mcninteractive.com",
+      "role": "Sponsor/owner"
+    },
+    {
+      "name": "Stephen Smith (vomitHatSteve)",
+      "email": "stephen.alister.smith@gmail.com",
+      "homepage": "http://www.llamamallrecords.com",
+      "role": "Maintainer"
+    }
+  ],
+  "support": {
+    "issue": "https://bombplates.desk.com"
+  }
+}

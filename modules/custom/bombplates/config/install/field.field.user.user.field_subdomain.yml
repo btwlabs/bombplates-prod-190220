@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_subdomain
+  module:
+    - user
+id: user.user.field_subdomain
+field_name: field_subdomain
+entity_type: user
+bundle: user
+label: Subdomain
+description: 'Subdomain for use during site setup. DO NOT EDIT'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

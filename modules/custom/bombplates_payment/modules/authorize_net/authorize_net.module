@@ -1,0 +1,85 @@
+<?php
+
+/**
+ * @file
+ *  Hook implementations for authorize_net module
+ */
+
+use Drupal\authorize_net\Inc as AuthorizeNet;
+
+/**
+ * Implements hook_bombplates_payment_list
+ */
+function authorize_net_bombplates_payment_list() {
+  return ['authorize_net' => 'Authorize.net'];
+} // hook_bombplates_payment_list
+
+/**
+ * Implements hook_bombplates_payment_admin_form
+ */
+function authorize_net_bombplates_payment_admin_form() {
+  return [
+    'authorize_net' => [
+      '#type' => 'details',
+      '#open' => TRUE,
+      '#title' => t('Authorize.net ARB'),
+      AuthorizeNet\AdminFunc::settings(),
+      '#prefix' => '<div id="authorize_net_bombplates_payment_settings" class="bombplates-payment-settings">',
+      '#suffix' => '</div>',
+    ],
+  ];
+} // hook_bombplates_payment_admin_form
+
+/**
+ * Implements hook_bombplates_process_account
+ */
+function authorize_net_bombplates_process_account($action, $account, $options) {
+  switch ($action) {
+    case 'cancel_subscription' :
+    case 'delete' :
+      AuthorizeNet\CancelFunc::subscription($account);
+  } // switch action
+} // hook_bombplates_process_account
+
+/**
+ * Implements hook_bombplates_payment_find_paying_users
+ */
+function authorize_net_bombplates_payment_find_paying_users() {
+  $uids = \Drupal::entityQuery('user')
+    ->condition('status', TRUE, '=')
+    ->exists('field_arb_subscription_id')
+    ->execute();
+
+  return ['authorize_net' => $uids];
+} // hook_bombplates_payment_find_paying_users
+
+/**
+ * Implements hook_bombplates_payment_alter
+ */
+function authorize_net_bombplates_payment_alter(&$data, &$context) {
+  if ($context['values']['payment_type'] == 'authorize_net') {
+    $data->field_arb_subscription_id->value = $context['values']['authorize_net']['subscription_id'];
+  }
+} // authorize_net_bombplates_payment_alter
+
+/**
+ * Implements hook_bombplates_payment_form
+ */
+function authorize_net_bombplates_payment_form($form, $service) {
+  if ($service == 'authorize_net') {
+    $form['authorize_net_warning'] = [
+      '#type' => 'markup',
+      '#prefix' => '<div class="warning">',
+      '#markup' => t('New Authorize.net subscriptions are not supported. Please contact the site administrator and enable another default payment gateway.'),
+      '#suffix' => '</div>',
+    ];
+  } // service = authorize_net
+  return $form;
+} // hook_bombplates_payment_form
+
+/**
+ * Implements hook_bombplates_protected_fields
+ */
+function authorize_net_bombplates_protected_fields() {
+  return ['field_arb_subscription_id'];
+} // hook_bombplates_protected_fields

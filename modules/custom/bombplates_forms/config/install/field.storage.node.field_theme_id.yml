@@ -1,0 +1,39 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_theme_id
+field_name: field_theme_id
+entity_type: node
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
+uuid: 9274831e-101b-4267-8d39-5c31fc765748
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_theme_id
+field_name: field_theme_id
+entity_type: node
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

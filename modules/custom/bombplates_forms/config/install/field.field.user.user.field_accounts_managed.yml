@@ -1,0 +1,34 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_accounts_managed
+  module:
+    - user
+id: user.user.field_accounts_managed
+field_name: field_accounts_managed
+entity_type: user
+bundle: user
+label: 'Accounts Managed'
+description: 'References accounts managed by this account manager'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    include_anonymous: false
+    filter:
+      type: role
+      role:
+        bombplate_account: bombplate_account
+        administrator: '0'
+        customer: customer
+        account_manager: '0'
+    target_bundles: null
+    sort:
+      field: field_subdomain
+      direction: ASC
+    auto_create: false
+field_type: entity_reference

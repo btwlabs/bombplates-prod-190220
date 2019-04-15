@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_next_payment
+  enforced:
+    module:
+      - user
+      - datetime
+      - bombplates_payment
+id: user.user.field_next_payment
+field_name: field_next_payment
+entity_type: user
+bundle: user
+label: 'Next Payment'
+description: 'When is this user''s next payment due? DO NOT EDIT'
+required: false
+translatable: false
+default_value:
+  -
+    default_date_type: relative
+    default_date: '+2 months'
+default_value_callback: ''
+settings: {  }
+field_type: datetime

@@ -1,0 +1,17 @@
+name: 'Bombplates Data Feeds'
+type: 'module'
+description: 'Create default views for feeding announcements and promotional opportunities to band sites'
+package: 'Bombplates'
+core: '8.x'
+version: '8.x-1.0'
+dependencies:
+  - bombplates
+  - bombplates_views
+  - datetime
+  - field
+  - menu_ui
+  - node
+  - path
+  - rest
+  - serialization
+  - views

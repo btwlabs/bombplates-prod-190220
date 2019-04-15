@@ -1,0 +1,39 @@
+id: bombplates_blog_author
+migration_group: bombplates
+label: 'Blog/Author node/term relationships'
+deriver: Drupal\taxonomy\Plugin\migrate\D6TermNodeDeriver
+
+dependencies:
+  enforced:
+    module:
+      - bombplates_migrate
+migration_dependencies:
+  required:
+    - bombplates_term
+    - bombplates_blog
+
+source:
+  plugin: d6_term_node
+  vid: '5'
+destination:
+  plugin: entity:node
+process:
+  type:
+    -
+      plugin: skip_on_value
+      value: 'blog'
+      method: row
+      source: type
+      not_equals: "FALSE"
+    -
+      plugin: get
+      source: type
+  nid:
+    -
+      plugin: migration_lookup
+      migration: bombplates_blog
+      source: nid
+    -
+      plugin: skip_on_empty
+      method: row
+  field_tax_author: tid

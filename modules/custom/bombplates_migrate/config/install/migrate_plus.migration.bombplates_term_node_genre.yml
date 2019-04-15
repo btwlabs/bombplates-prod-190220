@@ -1,0 +1,39 @@
+id: bombplates_bombplate_genre
+migration_group: bombplates
+label: 'Bombplate/Genre node/term relationships'
+deriver: Drupal\taxonomy\Plugin\migrate\D6TermNodeDeriver
+
+dependencies:
+  enforced:
+    module:
+      - bombplates_migrate
+migration_dependencies:
+  required:
+    - bombplates_term
+    - bombplates_bombplate
+
+source:
+  plugin: d6_term_node
+  vid: '2'
+destination:
+  plugin: entity:node
+process:
+  type:
+    -
+      plugin: skip_on_value
+      value: 'bombplate'
+      method: row
+      source: type
+      not_equals: "FALSE"
+    -
+      plugin: get
+      source: type
+  nid:
+    -
+      plugin: migration_lookup
+      migration: bombplates_bombplate
+      source: nid
+    -
+      plugin: skip_on_empty
+      method: row
+  field_genre: tid

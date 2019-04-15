@@ -1,0 +1,24 @@
+bombplates_forms administrator:
+  title: "Administer bombplates_forms settings"
+  description: "Allows access to the admin form as well as admin features of the account management forms. Nee 'account_forms administrator'"
+  restrict access: TRUE
+
+manage bombplates_forms:
+  title: "Manage Bombplates accounts"
+  description: "Allows a user to manage others' Bombplates accounts. Nee 'manage account_forms'"
+  restrict access: FALSE
+
+artist info bombplates_form:
+  title: "Launch own Bombplate"
+  description: "Allows a user to launch a site. Nee 'artist info account_form'"
+  restrict access: FALSE
+
+cancel bombplates_form:
+  title: "Delete own Bombplate"
+  description: "Allows a user to delete their own site and account. Nee 'cancel account_form'"
+  restrict access: FALSE
+
+get bombplates_forms commands:
+  title: "Retreive Bombplates accounts"
+  description: "Allows a user to retreive account launch commands. Nee 'get account_forms commands'"
+  restrict access: FALSE

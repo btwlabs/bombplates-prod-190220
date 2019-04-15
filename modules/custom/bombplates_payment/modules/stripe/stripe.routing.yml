@@ -1,0 +1,8 @@
+stripe_edit_plan:
+  path: '/admin/config/payment/stripe/{plan_id}'
+  defaults:
+    _form: '\Drupal\stripe\Form\StripePlanForm'
+    _title: "Add/edit stripe payment plan"
+    plan_id: ''
+  requirements:
+    _permission: 'admin bombplates_payment'

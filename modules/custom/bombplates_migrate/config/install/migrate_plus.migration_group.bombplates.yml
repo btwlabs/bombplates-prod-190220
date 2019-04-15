@@ -1,0 +1,11 @@
+id: bombplates
+label: Bombplates Migrate
+description: Migrate D6 Bombplates content to D8
+source_type: Drupal 6
+shared_configuration:
+  source:
+    key: migrate
+dependencies:
+  enforced:
+    module:
+      - bombplates_migrate

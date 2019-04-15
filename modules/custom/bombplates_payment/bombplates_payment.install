@@ -1,0 +1,52 @@
+<?php
+
+/**
+ * @file contains installation/update hooks for bombplates_payment module
+ */
+
+/**
+ * Implements hook_install
+ */
+function bombplates_payment_install() {
+  module_set_weight('bombplates_payment', 50);
+} // hook_install
+
+/**
+ * Implements hook_uninstall
+ */
+function bombplates_payment_uninstall() {
+  $entity_fields = [
+    'user' => [
+      'billing_status',
+      'missed_payments', 'suspended',
+      'last_payment', 'next_payment',
+      'artists_referred', 'referral_entered',
+    ],
+    'node' => [
+      'expiration',
+      'free_months',
+      'payment_name',
+      'payment_site',
+      'uses_left',
+    ],
+  ];
+  foreach ($entity_fields AS $entity => $fields) {
+    foreach ($fields AS $field) {
+      if ($field_storage = \Drupal\field\Entity\FieldStorageConfig::loadByName($entity, "field_$field")) {
+        $field_storage->delete();
+      }
+    } // foreach field in fields
+  } // foreach entity=>fields in entity_fields
+  $entities_to_delete = [
+    '\\Drupal\\node\\Entity\\NodeType' => ['bombplates_payment', 'coupon_code'],
+    '\\Drupal\\user\\Entity\\Role' => ['customer'],
+  ];
+  foreach ($entities_to_delete AS $type => $entity_ids) {
+    foreach ($entity_ids AS $id) {
+      if ($info = $type::load($id)) {
+        $info->delete();
+      }
+    } // foreach id in entity_ids
+  } // foreach type=>entity_ids in entities_to_delete
+  field_purge_batch(10);
+} // hook_uninstall

@@ -1,0 +1,51 @@
+password_update:
+  path: '/pw/update'
+  defaults:
+    _controller: '\Drupal\pw_sync\Controller\PwSyncController::update'
+    _title: 'Update Password'
+  requirements:
+    _permission: 'access content'
+password_outdate:
+  path: '/pw/outdate'
+  defaults:
+    _controller: '\Drupal\pw_sync\Controller\PwSyncController::outdate'
+    _title: 'Outdate Password'
+  requirements:
+    _permission: 'access content'
+password_checkup:
+  path: '/pw/checkup'
+  defaults:
+    _controller: '\Drupal\pw_sync\Controller\PwSyncController::checkup'
+    _title: 'Check for Password'
+  requirements:
+    _permission: 'access content'
+password_available:
+  path: '/pw/available'
+  defaults:
+    _controller: '\Drupal\pw_sync\Controller\PwSyncController::check_available'
+    _title: 'Name Availability'
+  requirements:
+    _permission: 'access content'
+password_resync:
+  path: '/pw/resync'
+  defaults:
+    _controller: '\Drupal\pw_sync\Controller\PwSyncController::resync'
+    _title: 'Resync Password'
+  requirements:
+    _permission: 'access content'
+user_sso:
+  path: '/user/sso'
+  defaults:
+    _controller: '\Drupal\pw_sync\Controller\PwSyncController::sso'
+    _title: 'Login'
+  requirements:
+    _permission: 'access content'
+password_admin:
+  path: '/admin/config/people/pw_sync'
+  defaults:
+    _form: '\Drupal\pw_sync\Form\PwSyncAdminForm'
+    _title: 'Password Sync Settings'
+  requirements:
+    _permission: 'administer pw_sync'
+  options:
+    _admin_route: TRUE

@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies: {  }
+id: bombplate_account
+label: 'Bombplate Account'
+weight: 5
+is_admin: null
+permissions:
+ - 'cancel bombplates_form'
+ - 'use bombplates_payment'

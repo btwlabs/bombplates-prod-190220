@@ -1,0 +1,33 @@
+<?php
+
+/**
+ * @file
+ *  [un]installation hooks for bombplates_views module
+ */
+
+/**
+ * Implements hook_uninstall
+ */
+function bombplates_views_uninstall() {
+  $views = [
+    'views.view.bombplates_payments',
+    'views.view.bombplates_users',
+    'views.view.cancelled_users',
+    'views.view.bombplates',
+  ];
+  $factory = \Drupal::configFactory();
+  foreach ($views as $view) {
+    $factory->getEditable($view)->delete();
+  }
+  $entities_to_delete = [
+    '\\Drupal\\user\\Entity\\Role' => ['billing', 'developer'],
+  ];
+  foreach ($entities_to_delete AS $type => $entity_ids) {
+    foreach ($entity_ids AS $id) {
+      if ($info = $type::load($id)) {
+        $info->delete();
+      }
+    } // foreach id in entity_ids
+  } // foreach type=>entity_ids in entities_to_delete
+
+} // hook_uninstall

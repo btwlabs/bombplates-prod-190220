@@ -1,0 +1,43 @@
+id: upgrade_block_content_body_field
+migration_group: bombplates
+label: 'Block content body field configuration'
+
+class: null
+field_plugin_method: null
+cck_plugin_method: null
+langcode: en
+status: true
+
+dependencies:
+  enforced:
+    module:
+      - bombplates_migrate
+migration_dependencies:
+  required:
+    - upgrade_block_content_type
+  optional: {  }
+
+source:
+  plugin: embedded_data
+  data_rows:
+    -
+      entity_type: block_content
+      bundle: basic
+      field_name: body
+      label: Body
+      display_summary: false
+  ids:
+    entity_type:
+      type: string
+    bundle:
+      type: string
+    field_name:
+      type: string
+process:
+  entity_type: entity_type
+  bundle: bundle
+  field_name: field_name
+  label: label
+  settings/display_summary: display_summary
+destination:
+  plugin: 'entity:field_config'

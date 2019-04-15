@@ -1,0 +1,115 @@
+<?php
+
+/**
+ * @file
+ *  Hook implementations for stripe payment module
+ */
+
+use Drupal\stripe\Inc as StripeFunc;
+
+/**
+ * Implements hook_theme
+ */
+function stripe_theme() {
+  return [
+    'stripe_payment_form' => [
+      'variables' => ['account' => NULL],
+      'template' => 'stripe_payment_form',
+      'file' => 'include/theme.inc',
+    ],
+  ];
+} // hook_theme
+
+/**
+ * Implements hook_cron
+ */
+function stripe_cron() {
+  $cron_last = \Drupal::state()->get('system.cron_last');
+  // Don't bother running on brand new installs
+  if ($cron_last) {
+    StripeFunc\CronFunc::logPaymentsSince($cron_last);
+    StripeFunc\CronFunc::logRefundsSince($cron_last);
+  } // if cron_last
+} // hook_cron
+
+/**
+ * Implements hook_bombplates_payment_list
+ */
+function stripe_bombplates_payment_list() {
+  return ['stripe' => 'Stripe'];
+} // hook_bombplates_payment_list
+
+/**
+ * Implements hook_bombplates_payment_admin_form
+ */
+function stripe_bombplates_payment_admin_form() {
+  return [
+    'stripe' => [
+      '#type' => 'details',
+      '#open' => TRUE,
+      '#title' => t('Stripe'),
+      StripeFunc\AdminFunc::Settings(),
+      '#prefix' => '<div id="stripe_bombplates_payment_settings" class="bombplates-payment-settings">',
+      '#suffix' => '</div>',
+    ],
+  ];
+} // hook_bombplates_payment_admin_form
+
+/**
+ * Implements hook_bombplates_process_account
+ */
+function stripe_bombplates_process_account($action, $account, $options) {
+  switch ($action) {
+    case 'cancel_subscription' :
+    case 'delete' :
+      $customer = $account->field_stripe_customer->value;
+      $stripe = StripeFunc\MiscFunc::loadApi();
+      if ($customer && $stripe) {
+        $stripe->deleteCustomer($customer);
+      } // if customer && stripe
+  } // switch action
+} // hook_bombplates_process_account
+
+/**
+ * Implements hook_bombplates_payment_alter
+ */
+function stripe_bombplates_payment_alter(&$data, &$context) {
+  $account = $context['account'];
+  $is_stripe = isset($context['values']['stripe']['stripe_customer'])
+    && isset($context['values']['stripe']['stripe_charge'])
+    && method_exists($data, 'getType')
+    && $data->getType() == 'bombplates_payment';
+  if ($is_stripe) {
+    $data->field_stripe_customer->value = $context['values']['stripe']['stripe_customer'];
+    $data->field_stripe_charge->value = $context['values']['stripe']['stripe_charge'];
+  } // if is_stripe
+} // hook_bombplates_payment_alter
+
+/**
+ * Implements hook_bombplates_payment_find_paying_users
+ */
+function stripe_bombplates_payment_find_paying_users() {
+  $uids = \Drupal::entityQuery('user')
+    ->condition('status', TRUE, '=')
+    ->exists('field_stripe_customer')
+    ->execute();
+
+  return ['stripe' => $uids];
+} // hook_bombplates_payment_find_paying_users
+
+/**
+ * Implements hook_bombplates_payment_form
+ */
+function stripe_bombplates_payment_form($form, $service) {
+  if ($service == 'stripe') {
+    StripeFunc\PaymentForm::build($form);
+  } // if stripe
+  return $form;
+} // hook_bombplates_payment_form
+
+/**
+ * Implements hook_bombplates_protected_fields
+ */
+function stripe_bombplates_protected_fields() {
+  return ['field_stripe_customer', 'field_stripe_subscription'];
+} // hook_bombplates_protected_fields

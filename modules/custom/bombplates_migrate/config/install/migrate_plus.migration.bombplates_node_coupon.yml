@@ -1,0 +1,49 @@
+id: bombplates_coupon
+label: Bombplates Coupon node migration
+migration_group: bombplates
+deriver: Drupal\node\Plugin\migrate\D6NodeDeriver
+
+dependencies:
+  enforced:
+    module:
+      - bombplates_migrate
+migration_dependencies:
+  required:
+    - bombplates_user
+
+source:
+  plugin: d6_node
+  node_type: coupon_code
+destination:
+  plugin: entity:node
+
+process:
+  type: type
+  nid: nid
+  vid: vid
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: "und"
+  title: title
+  uid: node_uid
+  status: status
+  created: created
+  changed: changed
+  promote: promote
+  sticky: sticky
+  'body/format':
+    plugin: default_value
+    default_value: full_html
+  'body/value': body
+  'body/summary': teaser
+  revision_uid: revision_uid
+  revision_log: log
+  revision_timestamp: timestamp
+  field_expiration:
+    plugin: format_date
+    from_format: 'U'
+    to_format: 'Y-m-d\TH:i:s'
+    source: 'field_expiration/0'
+  field_uses_left: field_uses_left
+  field_free_months: field_free_months

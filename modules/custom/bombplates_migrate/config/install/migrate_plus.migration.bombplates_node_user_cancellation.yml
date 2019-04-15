@@ -1,0 +1,56 @@
+id: bombplates_user_cancellation
+label: Bombplates User Cancellation node migration
+migration_group: bombplates
+
+dependencies:
+  enforced:
+    module:
+      - bombplates_migrate
+migration_dependencies:
+  required:
+    - bombplates_user
+
+source:
+  plugin: d6_node
+  node_type: user_cancellation
+destination:
+  plugin: entity:node
+
+process:
+  type:
+    plugin: default_value
+    default_value: user_cancellation
+  nid: nid
+  vid: vid
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: "und"
+  title: title
+  uid: node_uid
+  status: status
+  created: created
+  changed: changed
+  promote: promote
+  sticky: sticky
+  'body/format':
+    plugin: default_value
+    default_value: plain_text
+  'body/value': body
+  'body/summary': teaser
+  revision_uid: revision_uid
+  revision_log: log
+  revision_timestamp: timestamp
+  field_user_cancel_artist_name: field_user_cancel_artist_name
+  field_user_cancel_mail: field_user_cancel_mail
+  field_user_cancel_subdomain: field_user_cancel_subdomain
+  'field_user_cancel_dates/1/value':
+    plugin: format_date
+    to_format: 'Y-m-d'
+    from_format: 'Y-m-d\TH:i:s'
+    source: 'field_user_cancel_dates/0/value'
+  'field_user_cancel_dates/2/value':
+    plugin: format_date
+    to_format: 'Y-m-d'
+    from_format: 'Y-m-d\TH:i:s'
+    source: 'field_user_cancel_dates/0/value2'

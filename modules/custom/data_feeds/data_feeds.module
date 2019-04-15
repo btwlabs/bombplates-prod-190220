@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ *  hook invocations for data_feeds module
+ */
+
+/**
+ * Implements hook_bombplates_admin_links
+ */
+function data_feeds_bombplates_admin_links($account) {
+  if (!empty(array_intersect($account->getRoles(), ['administrator', 'developer', 'account_manager']))) {
+    return [
+      'data_feeds_partners_view' => [
+        '#type' => 'link',
+        '#title' => t('Partner Integrations'),
+        '#url' => \Drupal\Core\Url::fromRoute('view.partners.page_1'),
+      ],
+    ];
+  } // if user has an admin role
+} // hook_bombplates_admin_links

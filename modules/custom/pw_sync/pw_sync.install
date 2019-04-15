@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * @file - installation hooks and functions for pw_sync module
+ */
+
+/**
+ * Implements hook_requirements
+ */
+function pw_sync_requirements($phase) {
+  $result = [];
+  if ($phase == 'install') {
+    if (!extension_loaded("gnupg")) {
+      $result['pw_sync'] = [
+        'title' => 'GnuPG Extension required',
+        'description' => 'The GnuPG PHP extension must be installed for resyncing',
+        'severity' => REQUIREMENT_ERROR,
+      ];
+    } // if !gpg
+  } // if install phase
+  return $result;
+} // hook_requirements
+
+/**
+ * Implements hook_uninstall
+ */
+function pw_sync_uninstall() {
+  if ($field_storage = \Drupal\field\Entity\FieldStorageConfig::loadByName('user', 'field_pw_sync_key')) {
+    $field_storage->delete();
+  }
+  field_purge_batch(10);
+} // hook_uninstall

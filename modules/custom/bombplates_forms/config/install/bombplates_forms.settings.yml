@@ -1,0 +1,24 @@
+hosting_servers:
+  - bands5.bombplates.com
+gpg_encrypt_path: "vendor/bombplates/keys/bombplates"
+gpg_recipient: "support@bombplates.com"
+gpg_public_key: "bombplates.pubkey.txt"
+login_redirect:
+  administrator: "admin"
+  account_manager: "manage/account_forms"
+  customer: "user"
+  bombplate_account: "user/payment"
+  bombplate_pre_launch: "user/artist-info"
+  default: "user/artist-info"
+role_grants:
+  on_join:
+    grant: "bombplate_pre_launch"
+    revoke: ""
+  on_launch:
+    grant: "bombplate_account"
+    revoke: "bombplate_pre_launch"
+  on_payment:
+    grant: "customer"
+    revoke: "bombplate_trial"
+dnsimple:
+  token: "5ec49763b1382babc3b5a1bc88440193"

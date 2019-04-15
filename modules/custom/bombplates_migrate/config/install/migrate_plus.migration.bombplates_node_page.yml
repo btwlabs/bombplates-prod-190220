@@ -1,0 +1,81 @@
+id: bombplates_page
+label: Bombplates Basic Page node migration
+migration_group: bombplates
+deriver: Drupal\node\Plugin\migrate\D6NodeDeriver
+
+dependencies:
+  enforced:
+    module:
+      - bombplates_migrate
+migration_dependencies:
+  required:
+    - bombplates_user
+    - bombplates_file
+
+source:
+  plugin: d6_node
+  node_type: page
+destination:
+  plugin: entity:node
+
+process:
+  type: type
+  nid: nid
+  vid: vid
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: "und"
+  title: title
+  uid: node_uid
+  status: status
+  created: created
+  changed: changed
+  promote: promote
+  sticky: sticky
+  'body/format':
+    plugin: default_value
+    default_value: basic_html
+  'body/value': body
+  'body/summary': teaser
+  revision_uid: revision_uid
+  revision_log: log
+  revision_timestamp: timestamp
+  deprecated_nodes:
+    -
+      plugin: skip_on_value
+      value: 'launch site'
+      method: row
+      source: title
+    -
+      plugin: skip_on_value
+      value: 'Sign Up for Bombplates Emails!'
+      method: row
+    -
+      plugin: skip_on_value
+      value: 'All Bombplates artists'' upcoming shows'
+      method: row
+    -
+      plugin: skip_on_value
+      value: 'Cancellation Confirmed'
+      method: row
+    -
+      plugin: skip_on_value
+      value: 'Sign up today!'
+      method: row
+    -
+      plugin: skip_on_value
+      value: 'Pricing'
+      method: row
+    -
+      plugin: skip_on_value
+      value: 'Congratulations'
+      method: row
+    -
+      plugin: skip_on_value
+      value: 'BandPage'
+      method: row
+    -
+      plugin: skip_on_value
+      value: 'Redirect on login'
+      method: row

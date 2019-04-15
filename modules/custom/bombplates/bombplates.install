@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * @file
+ * Contains install and update functions for Bombplates.
+ */
+
+/**
+ * Implements hook_install()
+ */
+function bombplates_install() {
+  module_set_weight('bombplates', 999);
+} // hook_install
+
+/**
+ * Implements hook_uninstall
+ */
+function bombplates_uninstall() {
+  $entity_fields = [
+    'user' => [
+      'subdomain',
+    ],
+  ];
+  foreach ($entity_fields AS $entity => $fields) {
+    foreach ($fields AS $field) {
+      if ($field_storage = \Drupal\field\Entity\FieldStorageConfig::loadByName($entity, "field_$field")) {
+        $field_storage->delete();
+      }
+    } // foreach field in fields
+  } // foreach entity=>fields in entity_fields
+  field_purge_batch(10);
+} // hook_uninstall

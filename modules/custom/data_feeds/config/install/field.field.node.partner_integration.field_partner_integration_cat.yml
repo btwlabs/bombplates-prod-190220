@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_partner_integration_cat
+    - node.type.partner_integration
+    - taxonomy.vocabulary.partner_integration_category
+id: node.partner_integration.field_partner_integration_cat
+field_name: field_partner_integration_cat
+entity_type: node
+bundle: partner_integration
+label: Category
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      partner_integration_category: partner_integration_category
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

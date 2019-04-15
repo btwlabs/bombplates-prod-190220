@@ -1,0 +1,12 @@
+<div id="logo">
+  <object type="image/svg+xml" data="{{ svg }}"></object>
+</div><!--end logo-->
+<div id="progress_bar">
+  <span id="progress_top"></span>
+  <span id="progress_bottom"></span>
+</div>
+<div id="text">
+  <h1>{{ 'Please wait while we finish things up!'|t }}</h1>
+  <p><a href="{{ sso_url }}">{{ 'Please click here if you are not forwarded automatically.'|t }}</a></p>
+</div><!--end text-->
+<iframe src="https://{{ subdomain }}.bombplates.com/prompt.php" height="0" width="0" frameborder="0"></iframe>

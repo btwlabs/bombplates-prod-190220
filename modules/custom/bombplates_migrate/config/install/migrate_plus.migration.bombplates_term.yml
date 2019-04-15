@@ -1,0 +1,18 @@
+id: bombplates_term
+label: Bombplates taxonomy migration
+migration_group: bombplates
+dependencies:
+  enforced:
+    module:
+      - bombplates_migrate
+source:
+  plugin: bombplates_term
+
+destination:
+  plugin: entity:taxonomy_term
+
+process:
+  name: name
+  description: description
+  vid: vid
+  tid: tid

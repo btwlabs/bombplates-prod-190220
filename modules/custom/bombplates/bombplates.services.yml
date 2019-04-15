@@ -1,0 +1,9 @@
+services:
+  bombplates.renderer.bombplates_nohtml_renderer:
+    class: Drupal\bombplates\Render\BombplatesNohtmlRenderer
+    arguments: ['@renderer', '@html_response.attachments_processor']
+    lazy: true
+  bombplates.ssl_path_processor:
+    class: Drupal\bombplates\PathProcessor\SslPathProcessor
+    tags:
+      - { name: path_processor_outbound }

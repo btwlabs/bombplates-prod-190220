@@ -1,0 +1,20 @@
+show_subdomain:
+  version: "1.0"
+  js:
+    js/show_subdomain.js: {}
+  dependencies:
+    - core/jquery
+launch-page:
+  version: "1.0"
+  js:
+    js/launch-page.js: {}
+  dependencies:
+    - core/drupalSettings
+    - core/jquery
+preview_thumbs:
+  version: "1.0"
+  js:
+    js/preview_thumbs.js: {}
+  dependencies:
+    - core/drupalSettings
+    - core/jquery

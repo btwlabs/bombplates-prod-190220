@@ -1,0 +1,54 @@
+id: bombplates_bombplates_payment_stripe
+label: Bombplates Bombplates Stripe Payment node migration
+migration_group: bombplates
+deriver: Drupal\node\Plugin\migrate\D6NodeDeriver
+
+dependencies:
+  enforced:
+    module:
+      - bombplates_migrate
+migration_dependencies:
+  required:
+    - bombplates_user
+
+source:
+  plugin: d6_node
+  node_type: stripe_payment
+destination:
+  plugin: entity:node
+
+process:
+  type:
+    plugin: default_value
+    default_value: bombplates_payment
+  nid: nid
+  vid: vid
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: "und"
+  title: title
+  uid: node_uid
+  status: status
+  created:
+    plugin: format_date
+    to_format: 'U'
+    from_format: 'Y-m-d\TH:i:s'
+    source: 'field_payment_date/0'
+  changed: changed
+  promote: promote
+  sticky: sticky
+  'body/format':
+    plugin: default_value
+    default_value: plain_text
+  'body/value': body
+  'body/summary': teaser
+  revision_uid: revision_uid
+  revision_log: log
+  revision_timestamp: timestamp
+  field_payment_name: field_payment_name
+  field_payment_site: field_payment_site
+  field_stripe_charge: field_stripe_charge
+  field_stripe_customer:
+    plugin: bombplates_stripe_customer_process
+    source: field_stripe_customer

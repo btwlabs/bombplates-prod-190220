@@ -1,0 +1,40 @@
+bombplates.paying:
+  title: "Paying Users"
+  description: "All users with payment info entered"
+  parent: bombplates
+  route_name: bombplates.paying
+bombplates.oob:
+  title: "Out-of-band Users"
+  description: "All users who are being invoiced directly"
+  parent: bombplates
+  route_name: bombplates.oob
+bombplates.comped:
+  title: "Comped Users"
+  description: "All users with free accounts"
+  parent: bombplates
+  route_name: bombplates.comped
+bombplates.test:
+  title: "Test Users"
+  description: "All users with test/dev accounts"
+  parent: bombplates
+  route_name: bombplates.test
+bombplates.trial:
+  title: "Trial Users"
+  description: "All users still on their trial"
+  parent: bombplates
+  route_name: bombplates.trial
+bombplates.unknown:
+  title: "Unknown Status"
+  description: "Users whose payment status is unknown"
+  parent: bombplates
+  route_name: bombplates.unknown
+bombplates.cancelled:
+  title: "Cancellations"
+  description: "All cancelled users with reasons and dates"
+  parent: bombplates
+  route_name: bombplates.trial
+bombplates.payments:
+  title: Payments
+  description: "Payments by time"
+  parent: bombplates
+  route_name: bombplates.payments

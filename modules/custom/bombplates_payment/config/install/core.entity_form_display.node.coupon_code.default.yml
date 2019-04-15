@@ -1,0 +1,80 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.coupon_code.field_expiration
+    - field.field.node.coupon_code.field_free_months
+    - field.field.node.coupon_code.field_uses_left
+    - node.type.coupon_code
+  module:
+    - datetime
+    - path
+id: node.coupon_code.default
+targetEntityType: node
+bundle: coupon_code
+mode: default
+content:
+  created:
+    type: datetime_timestamp
+    weight: 10
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_expiration:
+    type: datetime_default
+    weight: 0
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_free_months:
+    type: number
+    weight: 0
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    region: content
+  field_uses_left:
+    type: number
+    weight: 0
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    region: content
+  path:
+    type: path
+    weight: 30
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  promote:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 15
+    third_party_settings: {  }
+    region: content
+  sticky:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 16
+    third_party_settings: {  }
+    region: content
+  title:
+    type: string_textfield
+    weight: -5
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    region: content
+  uid:
+    type: entity_reference_autocomplete
+    weight: 5
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    region: content
+hidden: {  }

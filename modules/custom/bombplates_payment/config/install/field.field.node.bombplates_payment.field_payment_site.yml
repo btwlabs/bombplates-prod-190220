@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_payment_site
+    - node.type.bombplates_payment
+id: node.bombplates_payment.field_payment_site
+field_name: field_payment_site
+entity_type: node
+bundle: bombplates_payment
+label: Site
+description: 'Site this payment was made for'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

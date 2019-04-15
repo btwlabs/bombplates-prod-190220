@@ -1,0 +1,4 @@
+bombplates:
+  title: 'Manage Bombplates'
+  weight: -15
+  route_name: bombplates

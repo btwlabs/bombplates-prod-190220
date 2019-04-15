@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'Partner Integration Category'
+vid: partner_integration_category
+description: ''
+hierarchy: 0
+weight: 0

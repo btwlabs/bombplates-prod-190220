@@ -1,0 +1,14 @@
+name: 'Bombplates Payment Framework'
+type: 'module'
+description: 'Parent module for Bombplates payment management. For/by Bombplates/MCN'
+package: 'Bombplates'
+core: '8.x'
+version: '8.x-1.1'
+dependencies:
+ - bombplates
+ - datetime
+ - field
+ - menu_ui
+ - node
+ - path
+ - views

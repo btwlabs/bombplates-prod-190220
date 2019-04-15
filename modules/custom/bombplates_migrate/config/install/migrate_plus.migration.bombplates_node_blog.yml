@@ -1,0 +1,48 @@
+id: bombplates_blog
+label: Bombplates Blog node migration
+migration_group: bombplates
+deriver: Drupal\node\Plugin\migrate\D6NodeDeriver
+
+dependencies:
+  enforced:
+    module:
+      - bombplates_migrate
+migration_dependencies:
+  required:
+    - bombplates_user
+    - bombplates_file
+
+source:
+  plugin: d6_node
+  node_type: blog
+destination:
+  plugin: entity:node
+
+process:
+  type: type
+  nid: nid
+  vid: vid
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: "und"
+  title: title
+  uid: node_uid
+  status: status
+  created: created
+  changed: changed
+  promote: promote
+  sticky: sticky
+  'body/format':
+    plugin: default_value
+    default_value: basic_html
+  'body/value': body
+  'body/summary': teaser
+  revision_uid: revision_uid
+  revision_log: log
+  revision_timestamp: timestamp
+  field_post_date:
+    plugin: format_date
+    from_format: 'Y-m-d\TH:i:s'
+    to_format: 'Y-m-d\TH:i:s'
+    source: 'field_post_date/0/value'

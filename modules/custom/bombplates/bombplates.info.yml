@@ -1,0 +1,6 @@
+name: 'Bombplates Core'
+type: 'module'
+description: 'Common functionality and libraries used throughout Bombplates. Successor to bombplates_mgmt. For/by Bombplates/MCN'
+package: 'Bombplates'
+core: '8.x'
+version: '8.x-1.0'

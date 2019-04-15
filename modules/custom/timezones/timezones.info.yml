@@ -1,0 +1,9 @@
+name: 'Timezones'
+type: 'module'
+description: 'Return timezone offsets any given city/state/zip. For/by Bombplates/MCN'
+package: 'Bombplates'
+core: '8.x'
+version: '8.x-2.0'
+dependencies:
+  - bombplates
+  - field

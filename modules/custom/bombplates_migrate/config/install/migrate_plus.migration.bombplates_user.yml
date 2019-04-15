@@ -1,0 +1,61 @@
+id: bombplates_user
+label: Bombplates user migration
+migration_group: bombplates
+
+dependencies:
+  enforced:
+    module:
+      - bombplates_migrate
+migration_dependencies:
+  required:
+    - upgrade_d6_user_role
+  optional: { }
+
+source:
+  plugin: bombplates_user
+
+destination:
+  plugin: entity:user
+
+process:
+  uid: uid
+  name: name
+  pass: pass
+  mail: mail
+  mode: mode
+  sort: sort
+  threshold: threshold
+  theme: theme
+  status: status
+  created: created
+  changed: created
+  access: access
+  login: login
+  timezone: timezone
+  langcode:
+    plugin: default_value
+    default_value: en
+  preferred_langcode:
+    plugin: default_value
+    default_value: en
+  preferred_admin_langcode:
+    plugin: default_value
+    default_value: en
+  init: init
+  field_missed_payments: missed_payments
+  field_pw_sync_key: pw_sync_key
+  field_websites: websites
+  field_subdomain: subdomain
+  field_trial_ends: trial_ends
+  field_band_name: band_name
+  field_artists_referred: artists_referred
+  field_referral_entered: referral_entered
+  field_suspended: suspended
+  field_billing_status: billing_status
+  field_last_payment: last_payment
+  field_next_payment: next_payment
+  field_stripe_customer: stripe_customer
+  field_stripe_subscription: stripe_subscription
+  field_accounts_managed: accounts_managed
+  field_arb_subscription_id: arb_subscription_id
+  roles: roles

@@ -1,0 +1,9 @@
+administer pw_sync:
+  title: "Administer Password Sync"
+  description: "Allows the user to access the Password Sync Settings administration page and bypass uniqueness checks"
+  restrict access: TRUE
+
+use pw_sync:
+  title: "Use Password Sync"
+  description: "Allows the user to keep their password synced with other sites"
+  restrict access: FALSE

@@ -1,0 +1,62 @@
+bombplates_forms.check_trial:
+  path: '/pw/trial'
+  defaults:
+    _controller: '\Drupal\bombplates_forms\Controller\BombplatesFormsController::trial'
+    _title: 'Trial Remaining'
+  requirements:
+    _permission: 'access content'
+bombplates_forms.launch-site:
+  path: '/launch_site'
+  defaults:
+    _controller: '\Drupal\bombplates_forms\Controller\BombplatesFormsController::launchSite'
+    _title: 'Launch Site'
+  requirements:
+    _role: 'bombplate_account'
+bombplates_forms_admin:
+  path: '/admin/config/bombplates_forms'
+  defaults:
+    _form: '\Drupal\bombplates_forms\Form\BombplatesFormsAdmin'
+  requirements:
+    _permission: 'bombplates_forms administrator'
+bombplates.account_forms:
+  path: '/manage/account_forms'
+  defaults:
+    _form: '\Drupal\bombplates_forms\Form\BombplatesFormsManage'
+    _title: 'Account Management Forms'
+  requirements:
+    _permission: 'manage bombplates_forms'
+bombplates.account_forms.type:
+  path: '/manage/account_forms/{type}'
+  defaults:
+    _title: 'Perform Action'
+    _controller: '\Drupal\bombplates_forms\Controller\BombplatesFormsManageModal::openModalForm'
+  requirements:
+    _permission: 'manage bombplates_forms'
+  options:
+    _admin_route: TRUE
+user.get_account_commands:
+  path: '/user/get_account_commands'
+  defaults:
+    _controller: '\Drupal\bombplates_forms\Controller\BombplatesFormsController::getCommands'
+    _title: 'Get Bombplates Commands'
+  requirements:
+    _permission: 'get bombplates_forms commands'
+user.artist_info:
+  path: '/user/artist-info'
+  defaults:
+    _form: '\Drupal\bombplates_forms\Form\BombplatesFormsArtistInfo'
+  requirements:
+    _custom_access: '\Drupal\bombplates_forms\Form\BombplatesFormsArtistInfo::access'
+user.cancel:
+  path: '/user/cancel'
+  defaults:
+    _form: '\Drupal\bombplates_forms\Form\BombplatesFormsCancel'
+  requirements:
+    _permission: 'cancel bombplates_form'
+user.cancel.bye:
+  path: '/user/cancel/bye'
+  defaults:
+    _controller: '\Drupal\bombplates_forms\Controller\BombplatesFormsController::bye'
+    _title: 'Cancellation Confirmed'
+  requirements:
+    _access: 'TRUE'

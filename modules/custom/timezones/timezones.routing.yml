@@ -1,0 +1,28 @@
+timezones.get:
+  path: '/timezone/get'
+  defaults :
+    _controller: '\Drupal\timezones\Controller\TimezonesController::get'
+    _title: 'Timezone'
+  requirements:
+    _permission: 'access content'
+timezones.get_city:
+  path: '/timezone/get/{city}'
+  defaults :
+    _controller: '\Drupal\timezones\Controller\TimezonesController::get'
+    _title: 'Timezone'
+  requirements:
+    _permission: 'access content'
+timezones.get_state:
+  path: '/timezone/get/{city}/{state}'
+  defaults :
+    _controller: '\Drupal\timezones\Controller\TimezonesController::get'
+    _title: 'Timezone'
+  requirements:
+    _permission: 'access content'
+timezones.get_zip:
+  path: '/timezone/get/{city}/{state}/{zip}'
+  defaults :
+    _controller: '\Drupal\timezones\Controller\TimezonesController::get'
+    _title: 'Timezone'
+  requirements:
+    _permission: 'access content'

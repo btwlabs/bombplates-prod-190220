@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_free_months
+    - node.type.coupon_code
+id: node.coupon_code.field_free_months
+field_name: field_free_months
+entity_type: node
+bundle: coupon_code
+label: 'Free Months'
+description: 'How many months of free hosting does this coupon code grant?'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 1
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

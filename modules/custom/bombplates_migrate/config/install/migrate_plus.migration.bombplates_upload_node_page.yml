@@ -1,0 +1,41 @@
+id: bombplates_page_file
+migration_group: bombplates
+label: 'Page/file node/upload relationships'
+deriver: Drupal\taxonomy\Plugin\migrate\D6TermNodeDeriver
+
+dependencies:
+  enforced:
+    module:
+      - bombplates_migrate
+migration_dependencies:
+  required:
+    - bombplates_file
+    - bombplates_page
+
+source:
+  plugin: d6_upload
+destination:
+  plugin: entity:node
+process:
+  type:
+    -
+      plugin: skip_on_value
+      value: 'page'
+      method: row
+      source: type
+      not_equals: "FALSE"
+    -
+      plugin: get
+      source: type
+  nid: nid
+  vid: vid
+  field_page_file_attachments:
+    plugin: iterator
+    source: upload
+    process:
+      target_id:
+        plugin: migration
+        migration: bombplates_file
+        source: fid
+      display: list
+      description: description

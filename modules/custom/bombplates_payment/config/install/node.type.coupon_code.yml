@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+  enforced:
+    module:
+      - bombplates_payment
+third_party_settings:
+  menu_ui:
+    available_menus:
+      - main
+    parent: 'main:'
+name: 'Coupon Code'
+type: coupon_code
+description: 'Coupon codes. If a user enters one of these during the purchase process, his/her trial period will be extended by 1 or more months.'
+help: ''
+new_revision: false
+preview_mode: 1
+display_submitted: true

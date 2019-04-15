@@ -1,0 +1,13 @@
+name: 'Bombplates Management Forms'
+description: 'Sign-up forms for account creation, modification, and deletion. Includes account manager versions. For/by Bombplates/MCN'
+type: 'module'
+core: '8.x'
+package: 'Bombplates'
+version: '8.x-2.0'
+dependencies:
+ - bombplates
+ - bombplates_payment
+ - field
+ - image
+ - pw_sync
+ - taxonomy

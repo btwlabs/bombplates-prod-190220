@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_suspended
+  module:
+    - user
+  enforced:
+    module:
+      - bombplates_payment
+id: user.user.field_suspended
+field_name: field_suspended
+entity_type: user
+bundle: user
+label: Suspended
+description: 'Is the user currently suspended? DO NOT EDIT'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: Suspended
+  off_label: Active
+field_type: boolean

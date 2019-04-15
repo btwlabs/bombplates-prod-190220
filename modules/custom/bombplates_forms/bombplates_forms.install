@@ -1,0 +1,111 @@
+<?php
+
+/**
+ * Implements hook_requirements
+ */
+function bombplates_forms_requirements($phase) {
+  $result = [];
+  if ($phase == 'install') {
+    if (!extension_loaded("gnupg")) {
+      $result['bombplates_forms'] = [
+        'title' => 'GnuPG Extension required',
+        'description' => 'The GnuPG PHP extension must be installed for passing account commands to hosting server',
+        'severity' => REQUIREMENT_ERROR,
+      ];
+    } // if !gpg
+  } // if install phase
+  return $result;
+} // hook_requirements
+
+/**
+ * implements hook_install
+ */
+function bombplates_forms_install() {
+  module_set_weight('bombplates_forms', -5);
+  \Drupal::configFactory()->getEditable('user.settings')->set('notify.register_no_approval_required', FALSE)->save();
+} // hook_install
+
+/**
+ * Implements hook_uninstall
+ */
+function bombplates_forms_uninstall() {
+  $entity_fields = [
+    'user' => [
+      'trial_ends',
+      'websites',
+      'band_name',
+      'accounts_managed',
+    ],
+    'node' => [
+      'user_cancel_artist_name',
+      'user_cancel_dates',
+      'user_cancel_mail',
+      'user_cancel_subdomain',
+      'genre',
+      'sku',
+      'image',
+    ],
+  ];
+  foreach ($entity_fields AS $entity => $fields) {
+    foreach ($fields AS $field) {
+      if ($field_storage = \Drupal\field\Entity\FieldStorageConfig::loadByName($entity, "field_$field")) {
+        $field_storage->delete();
+      }
+    } // foreach field in fields
+  } // foreach entity=>fields in entity_fields
+  $entities_to_delete = [
+    '\\Drupal\\taxonomy\\Entity\\Vocabulary' => ['genre'],
+    '\\Drupal\\node\\Entity\\NodeType' => ['bombplate', 'user_cancellation'],
+    '\\Drupal\\user\\Entity\\Role' => [
+      'account_manager',
+      'bombplate_account',
+      'bombplate_pre_launch',
+      'bombplate_trial',
+    ],
+  ];
+  foreach ($entities_to_delete AS $type => $entity_ids) {
+    foreach ($entity_ids AS $id) {
+      if ($info = $type::load($id)) {
+        $info->delete();
+      }
+    } // foreach id in entity_ids
+  } // foreach type=>entity_ids in entities_to_delete
+  field_purge_batch(10);
+} // hook_uninstall
+
+/**
+ * Implements hook_schema
+ */
+function bombplates_forms_schema() {
+  $schema['bombplates_account_commands'] = [
+    'description' => 'Pending linux commands to manage accounts',
+    'fields' => [
+      'cid' => [
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'server' => [
+        'type' => 'varchar',
+        'description' => 'Server the command goes to',
+        'length' => 32,
+        'not null' => TRUE,
+      ],
+      'command' => [
+        'type' => 'text',
+        'size' => 'big',
+        'description' => 'The command itself',
+        'not null' => TRUE,
+      ],
+      'time_sent' => [
+        'type' => 'int',
+        'description' => 'Time the command was sent to the server',
+      ],
+    ],
+    'indexes' => [
+      'cid' => ['cid'],
+    ],
+    'primary keys' => ['cid'],
+  ];
+  return $schema;
+} // hook_schema

@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies: {  }
+name: design_style
+label: design_style
+effects:
+  -
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 400
+      height: 296

@@ -1,0 +1,146 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for Bombplates management tools
+ */
+
+use Drupal\bombplates\Inc as Bombplates;
+
+/**
+ * Implements hook_theme
+ */
+function bombplates_theme($existing, $type, $theme, $path) {
+  return [
+    'bombplates_mail_header' => [
+      'variables' => ['subject' => ''],
+      'template' => 'bombplates_mail_header',
+      'file' => 'bombplates.theme.inc',
+    ],
+    'bombplates_mail_footer' => [
+      'variables' => ['is_external' => TRUE],
+      'template' => 'bombplates_mail_footer',
+      'file' => 'bombplates.theme.inc',
+    ],
+    'bombplates_mail_body' => [
+      'variables' => ['body' => []],
+      'template' => 'bombplates_mail_body',
+      'file' => 'bombplates.theme.inc',
+    ],
+  ];
+} // hook_theme
+
+/**
+ * Implements hook_mail
+ */
+function bombplates_mail($key, &$message, $params) {
+  $message['to'] = $params['to'];
+  $message['from'] = $params['from'];
+  $message['subject'] = (string)($params['subject']);
+  $body = [
+    'header' => ['#theme' => 'bombplates_mail_header', '#subject' => $params['subject']],
+    'body' => [
+      '#theme' => 'bombplates_mail_body',
+      '#body' => $params['body'],
+    ],
+    'footer' => ['#theme' => 'bombplates_mail_footer', '#is_external' => $params['is_external']],
+  ];
+  $message['body'][] = new \Drupal\Component\Render\HtmlEscapedText(
+    Drupal::service('renderer')->renderPlain($body), []
+  );
+  $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed; delsp=yes';
+  global $base_url;
+  $message['headers']['Message-ID'] = md5(uniqid(\Drupal::time()->getRequestTime())) . '@' . preg_replace('!^https?://!', '', $base_url);
+  //$message['headers']['Precedence'] = 'bulk';
+} // hook_mail
+
+/**
+ * Implements hook_mail_alter
+ *
+ * For some reason, From is being set to site name, which is not valid. For now, hack in a fix.
+ */
+function bombplates_mail_alter(&$message) {
+  if (isset($message['headers']['From']) && !\Drupal::service('email.validator')->isValid($message['headers']['From'])) {
+    $message['headers']['From'] = $message['from'];
+  }
+  $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed; delsp=yes';
+} // hook_mail_alter
+
+/**
+ * Implements hook_toolbar
+ */
+function bombplates_toolbar() {
+  $items = [];
+  $account = \Drupal::currentUser();
+  $links = \Drupal::moduleHandler()->invokeAll('bombplates_admin_links', [$account]);
+  $items['bombplates'] = [
+    '#type' => 'toolbar_item',
+    'tab' => [
+      '#type' => 'link',
+      '#title' => t('Bombplates'),
+      '#url' => \Drupal\Core\Url::fromRoute('bombplates'),
+      '#attributes' => [
+        'title' => t('Shortcuts'),
+        'class' => ['toolbar-icon', 'toolbar-icon-bombplates'],
+      ],
+    ],
+    'tray' => [
+      '#heading' => t('Bombplates Links'),
+      'links' => [
+        '#theme' => 'item_list',
+        '#items' => $links,
+      ],
+    ],
+    '#weight' => -5,
+    '#cache' => ['contexts' => ['user']],
+  ];
+  return $items;
+} // hook_toolbar
+
+/**
+ * Implements hook_entity_field_access
+ */
+function bombplates_entity_field_access($operation, $field_definition, $account, $items) {
+  $result = \Drupal\Core\Access\AccessResult::neutral();
+  $fields = \Drupal::moduleHandler()->invokeAll('bombplates_protected_fields');
+  if (in_array($field_definition->getName(), $fields)) {
+    $result = \Drupal\Core\Access\AccessResult::forbiddenIf(!$account->hasPermission('administer_users'));
+  } // if field is in bombplates_protected_fields
+  return $result;
+} // hook_entity_field_access
+
+/**
+ * Implements hook_entity_form_display_alter
+ */
+function bombplates_entity_form_display_alter($form_display, $context) {
+  if ($context['entity_type'] == 'user' && !\Drupal\user\Entity\User::load(\Drupal::currentUser()->id())->hasPermission('administer_users')) {
+    $fields = \Drupal::moduleHandler()->invokeAll('bombplates_protected_fields');
+    foreach ($fields AS $field) {
+      $component = $form_display->getComponent($field);
+      $form_display->setComponent($field, ['type' => 'visible']);
+    }
+  } // if user form
+} // hook_entity_form_display_alter
+
+/**
+ * Implements hook_bombplates_protected_fields
+ */
+function bombplates_bombplates_protected_fields() {
+  return ['field_subdomain'];
+} // hook_bombplates_protected_fields
+
+/**
+ * Implements hook_bombplates_process_account
+ */
+function bombplates_bombplates_process_account($action, $account, $options = []) {
+  switch ($action) {
+    case 'delete' :
+      Bombplates\AccountFunc::deleteAccount($account);
+      break; // case delete
+
+    case 'paid' :
+    case 'suspend' :
+    case 'unsuspend' :
+    default :
+  } // switch action
+} // hook_bombplates_process_account

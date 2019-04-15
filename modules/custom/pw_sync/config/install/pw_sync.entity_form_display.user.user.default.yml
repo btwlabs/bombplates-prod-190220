@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.user.user.field_pw_sync_key
+  module:
+    - user
+id: user.user.default
+bundle: user
+mode: default
+hidden:
+  field_pw_sync_key: true

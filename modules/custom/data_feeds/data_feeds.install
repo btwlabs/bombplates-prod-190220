@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * @file
+ *  [un]installation hooks for bombplates_views module
+ */
+
+/**
+ * Implements hook_uninstall
+ */
+function data_feeds_uninstall() {
+  $views = [
+    'views.view.announcements',
+    'views.view.partners',
+  ];
+  $factory = \Drupal::configFactory();
+  foreach ($views as $view) {
+    $factory->getEditable($view)->delete();
+  }
+  $entity_fields = [
+    'announcement_date',
+    'announcement_expiration',
+    'announcement_priority',
+    'partner_alt_icon',
+    'partner_integration_cat',
+    'partner_integration_desc',
+    'partner_integration_icon',
+    'partner_integration_refurl',
+    'partner_integration_weight',
+  ];
+  foreach ($entity_fields AS $entity => $fields) {
+    foreach ($fields AS $field) {
+      if ($field_storage = \Drupal\field\Entity\FieldStorageConfig::loadByName($entity, "field_$field")) {
+        $field_storage->delete();
+      }
+    }
+  }
+  $entities_to_delete = [
+    '\\Drupal\\node\\Entity\\NodeType' => ['partner_integration', 'announcement'],
+    '\\Drupal\\taxonomy\\Entity\\Vocabulary' => ['partner_integration_category'],
+  ];
+  foreach ($entities_to_delete AS $type => $entity_ids) {
+    foreach ($entity_ids AS $id) {
+      if ($info = $type::load($id)) {
+        $info->delete();
+      }
+    }
+  }
+  field_purge_batch(10);
+} // hook_uninstall

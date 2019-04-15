@@ -1,0 +1,62 @@
+id: bombplates_partner_integration
+label: Bombplates Partner Integration node migration
+migration_group: bombplates
+deriver: Drupal\node\Plugin\migrate\D6NodeDeriver
+
+dependencies:
+  enforced:
+    module:
+      - bombplates_migrate
+migration_dependencies:
+  required:
+    - bombplates_file
+    - bombplates_term
+    - bombplates_user
+
+source:
+  plugin: d6_node
+  node_type: partner_integration
+destination:
+  plugin: entity:node
+
+process:
+  type: type
+  nid: nid
+  vid: vid
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: "und"
+  title: title
+  uid: node_uid
+  status: status
+  created: created
+  changed: changed
+  promote: promote
+  sticky: sticky
+  'body/format':
+    plugin: default_value
+    default_value: basic_html
+  'body/value': body
+  'body/summary': teaser
+  revision_uid: revision_uid
+  revision_log: log
+  revision_timestamp: timestamp
+  field_partner_integration_desc: field_partner_integration_desc
+  'field_partner_integration_refurl/uri': 'field_partner_integration_refurl/0/value'
+  'field_partner_integration_refurl/title': title
+  field_order: field_partner_integration_weight
+  field_partner_integration_cat:
+    plugin: migration_lookup
+    migration: bombplates_term
+    source: 'field_partner_integration_cat/0/value'
+  field_partner_integration_icon:
+    plugin: migration_lookup
+    migration: bombplates_file
+    no_stub: true
+    source: 'field_partner_integration_icon/0/fid'
+  field_partner_alt_icon:
+    plugin: migration_lookup
+    migration: bombplates_file
+    no_stub: true
+    source: 'field_partner_alt_icon/0/fid'

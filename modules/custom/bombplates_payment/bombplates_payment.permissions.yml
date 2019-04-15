@@ -1,0 +1,9 @@
+use bombplates_payment:
+  title: "Use Bombplates Payment system"
+  description: "Allows the user to set up payment plans for Bombplates subscriptions"
+  restrict access: FALSE
+
+admin bombplates_payment:
+  title: "Administer Bombplates Payment system"
+  description: "Allows the user to administer payment settings"
+  restrict access: TRUE

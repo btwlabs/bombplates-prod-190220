@@ -1,0 +1,35 @@
+id: upgrade_d6_system_date
+migration_group: bombplates
+label: 'System date configuration'
+
+langcode: en
+status: true
+class: null
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 6'
+
+dependencies:
+  enforced:
+    module:
+      - bombplates_migrate
+migration_dependencies:
+  required: {  }
+  optional: {  }
+
+source:
+  plugin: variable
+  variables:
+    - configurable_timezones
+    - date_first_day
+    - date_default_timezone
+process:
+  timezone/user/configurable: configurable_timezones
+  first_day: date_first_day
+  timezone/default:
+    plugin: timezone
+    source: date_default_timezone
+destination:
+  plugin: config
+  config_name: system.date

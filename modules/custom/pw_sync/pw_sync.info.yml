@@ -1,0 +1,8 @@
+name: 'Password Sync'
+type: 'module'
+description: 'Allow sites to sync passwords following a tree structure. Formerly pw_integrate. For/by Bombplates/MCN'
+package: 'Bombplates'
+core: '8.x'
+version: '8.x-2.2'
+dependencies:
+  - bombplates

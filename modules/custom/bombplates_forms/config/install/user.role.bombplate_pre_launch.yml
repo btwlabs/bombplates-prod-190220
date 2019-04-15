@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies: {  }
+id: bombplate_pre_launch
+label: 'Bombplate Pre-launch'
+weight: 6
+is_admin: null
+permissions:
+ - 'cancel bombplates_form'
+ - 'artist info bombplates_form'

@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_expiration
+    - node.type.coupon_code
+  module:
+    - datetime
+id: node.coupon_code.field_expiration
+field_name: field_expiration
+entity_type: node
+bundle: coupon_code
+label: Expiration
+description: 'Date this coupon will expire. Default is 10 years (effectively no expiration)'
+required: false
+translatable: false
+default_value:
+  -
+    default_date_type: relative
+    default_date: '+10 years'
+default_value_callback: ''
+settings: {  }
+field_type: datetime

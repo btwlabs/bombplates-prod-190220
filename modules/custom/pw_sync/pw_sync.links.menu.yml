@@ -1,0 +1,11 @@
+password_admin:
+  title: 'Password Sync Settings'
+  parent: user.admin_index
+  description: 'Configure password syncronization settings'
+  weight: -5
+  route_name: password_admin
+user_sso:
+  title: 'Manage My Site'
+  menu_name: account
+  route_name: user_sso
+  weight: 0

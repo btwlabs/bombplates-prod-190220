@@ -1,0 +1,176 @@
+<?php
+
+/**
+ * @file
+ *  Hook implementations for the bombplates_forms module
+ */
+
+use Drupal\bombplates_forms\Inc as BombplatesForms;
+use Drupal\bombplates_payment\Inc as BombplatesPayment;
+
+/**
+ * Implements hook_theme
+ */
+function bombplates_forms_theme() {
+  return [
+    'bombplates_forms_launch_page' => [
+      'variables' => ['subdomain' => '', 'sso_url' => ''],
+      'template' => 'bombplates_forms_launch_page',
+      'file' => 'bombplates_forms.theme.inc',
+    ],
+  ];
+} // hook_theme
+
+/**
+ * Implements hook_cron
+ */
+function bombplates_forms_cron() {
+  $time_range = \Drupal::time()->getRequestTime() - Drupal::state()->get('system.cron_last'); // how long since the last cron
+  BombplatesForms\CronFunc::processIncompleteAccounts($time_range);
+  BombplatesForms\CronFunc::processTrials($time_range);
+  BombplatesForms\CronFunc::promptOutstanding();
+} // hook_cron
+
+/**
+ * Implements hook_ENTITY_TYPE_insert (user)
+ */
+function bombplates_forms_user_insert(\Drupal\Core\Entity\EntityInterface $entity) {
+  $config = \Drupal::config('bombplates_forms.settings');
+  $role_grants = $config->get('role_grants');
+  unset($role_grants['on_join']);
+  $new_user = TRUE;
+  foreach ($role_grants AS $role_grant) {
+    if (isset($role_grant['grant']) && $entity->hasRole($role_grant['grant'])) {
+      $new_user = FALSE;
+    }
+  } // foreach role_grant in role_grants
+  if ($new_user) {
+    BombplatesForms\MiscFunc::grantRoles($entity, 'on_join');
+  }
+} // hook_user_insert
+
+/**
+ * Implements hook_form_alter
+ */
+function bombplates_forms_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  if (in_array($form_id, ['user_login_block', 'user_login', 'user_profile_form', 'user_register'])) {
+    $form['#submit'][] = 'bombplates_forms_login_submit';
+  } // login/register form
+  if ($form_id == 'user_register_form') {
+    $form = BombplatesForms\ArtistInfoFunc::artistInfoEmbed($form, $form_state);
+  } // form_id=user_register
+} // hook_form_alter
+
+/**
+ * Login form submit handler - Redirect users to the correct location on login
+ *
+ * @param array $form
+ *  Per drupal forms api
+ * @param FormStateInterface $form_state
+ *  Per drupal forms api
+ */
+function bombplates_forms_login_submit($form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  $user = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
+  $config = \Drupal::config('bombplates_forms.settings');
+  $login_redirect = $config->get('login_redirect');
+  foreach ($login_redirect AS $role => $path) {
+    if ($user->hasRole($role)) {
+      $destination = $path;
+      break;
+    } // user has role
+  } // foreach role=>path in login_redirect
+  $destination = isset($destination) ? $destination : $login_redirect['default'];
+  $form_state->setRedirectUrl(\Drupal\Core\Url::fromUri("internal:/$destination"));
+} // bombplates_forms_login_submit
+
+/**
+ * Implements hook_bombplates_process_account
+ */
+function bombplates_forms_bombplates_process_account($action, $account, $options = NULL) {
+  $servers = [];
+  switch ($action) {
+    case 'suspend' :
+      if (!$options['warning_only']) {
+        $servers += BombplatesForms\SuspendFunc::suspendAccountSites($account);
+        BombplatesForms\MailFunc::alertAm('suspended', $account);
+        BombplatesForms\MailFunc::alertArtist($account);
+      } // if !warning only
+      break; // case suspend
+
+    case 'unsuspend' :
+      $servers += BombplatesForms\SuspendFunc::unsuspendAccountSites($account);
+      break; // case unsuspend
+
+    case 'delete' :
+      BombplatesForms\DeleteFunc::deleteAccount($account);
+      BombplatesForms\MailFunc::alertSales($account);
+      break; // case delete
+
+    case 'paid' :
+      BombplatesForms\MiscFunc::grantRoles($account, 'on_payment');
+  } // switch action
+  if (!empty($servers)) {
+    //foreach ($servers AS $server) {
+    //  BombplatesForms\NetworkFunc::promptScripts([$server]);
+    //}
+    BombplatesForms\NetworkFunc::promptScripts($servers);
+  } // if servers
+} // hook_bombplates_process_account
+
+/**
+ * Implements hook_bombplates_payment_form
+ */
+function bombplates_forms_bombplates_payment_form($form, $service) {
+  $account = $form['#account'];
+  $form['#trial_ends'] = $account->field_trial_ends->value > \Drupal::time()->getRequestTime() ? $account->field_trial_ends->value : 0;
+  $form['authorization']['description'][] = t(
+    'This account can be cancelled, preventing any future payments, at any time by filling out @lnk.',
+    ['@lnk' => \Drupal\Core\Link::fromTextAndUrl('the cancellation form', \Drupal\Core\Url::fromUri('internal:/user/cancel'))->toString()]
+  );
+  $trial_ends = $account->field_trial_ends->value;
+  if (!BombplatesPayment\MiscFunc::isCustomer($account)) {
+    $trial_date = is_int($trial_ends) ? date('F jS', $trial_ends) : $trial_ends;
+    $form['trial_ends'] = [
+      '#type' => 'markup',
+      '#markup' => '<h2>Enter payment info to keep using Bombplates after your free trial expires.</h2>'
+        . '<div class="payment-left">'
+        . t('You will not be charged until your trial is over. Your first billing date will be')
+        . ' <span class="pay_strong">' . $trial_date . '.</span>'
+        . '<div class="clr"></div></div><div class="payment-right">'
+        . '<div class="clr"></div></div>',
+    ];
+  } // if still in trial
+  return $form;
+} // hook_bombplates_payment_form
+
+/**
+ * Implements hook_bombplates_payment_alter
+ */
+function bombplates_forms_bombplates_payment_alter(&$data, &$context) {
+  if ($context['values']['payment_type'] == 'bombplates_forms') {
+    $am = $context['values']['bombplates_forms']['am'];
+    $data->title->value = t('Make up payment logged by @n (@u)', ['@n' => $am->name->value, '@u' => $am->uid->value]);
+  }
+} // hook_bombplates_payment_alter
+
+/**
+ * implements hook_bombplates_protected_fields
+ */
+function bombplates_forms_bombplates_protected_fields() {
+  return ['field_band_name', 'field_trial_ends', 'field_websites', 'field_accounts_managed'];
+} // hook_bombplates_protected_fields
+
+/**
+ * Implements hook_bombplates_admin_links
+ */
+function bombplates_forms_bombplates_admin_links($account) {
+  if ($account->hasPermission('manage bombplates_forms')) {
+    return [
+      'bombplates_account_management' => [
+        '#type' => 'link',
+        '#title' => t('Account Management'),
+        '#url' => \Drupal\Core\Url::fromRoute('bombplates.account_forms'),
+      ],
+    ];
+  } // user has access
+} // hook_bombplates_admin_links

@@ -1,0 +1,10 @@
+name: 'Bombplates Migrate'
+type: 'module'
+description: 'Custom migrate functionality for Bombplates data'
+package: 'Bombplates'
+core: '8.x'
+version: '8.x-1.0'
+dependencies:
+ - migrate
+ - migrate_plus
+ - migrate_upgrade
